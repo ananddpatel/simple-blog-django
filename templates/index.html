@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-preview">
+                {% for object in object_list %}
+                <!-- <a href="#"> -->
+                    <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
+                    <p class="post-meta">Created: {{ object.created }}</p>
+                    <p class="post-subtitle">
+                        {{ object.body|markdown }}
+                    </p>
+                    {% if object.tag %}
+                    <p class="post-meta">
+                    Tagged under: {{ object.tag.all|join:" " }}
+                    </p>
+                    {% endif %}
+                <!-- </a> -->
+                {% endfor %}
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+<hr>
+{% endblock %}

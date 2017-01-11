@@ -1,7 +1,16 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
+
+class Tag(models.Model):
+	slug = models.SlugField(max_length=200, unique=True)
+
+	def __str__(self):
+		return self.slug
+
 class EntryQuerySet(models.QuerySet):
+
 	def published(self):
 		return self.filter(publish=True)
 
@@ -15,11 +24,14 @@ class Entry(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	# auto_now tracks the time when this field is changed
 	modified = models.DateTimeField(auto_now=True)
-
 	objects = EntryQuerySet.as_manager()
+	tag = models.ManyToManyField(Tag)
 
 	def __str__(self):
 		return self.title
+
+	def get_absolute_url(self):
+		return reverse("entry_detail", kwargs={"slug": self.slug})
 
 	class Meta:
 		verbose_name = "Blog Entry"
